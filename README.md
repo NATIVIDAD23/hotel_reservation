@@ -42,3 +42,14 @@ The platform is designed to simplify the reservation process, providing guests w
 
 ## 📂 Project Structure (simplified)
 
+hotel-reservation/
+│── app/ # Laravel backend (models, controllers, etc.)
+│── database/ # Migrations & seeders
+│── resources/
+│ ├── js/ # React frontend
+│ │ ├── components/ # Shadcn UI components
+│ │ ├── pages/ # React pages (Booking, Rooms, Dashboard)
+│ └── css/ # Tailwind styles
+│── routes/ # Web & API routes
+│── public/ # Public assets
+│── README.md
