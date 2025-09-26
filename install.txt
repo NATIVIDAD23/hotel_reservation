@@ -1,0 +1,23 @@
+*** Install ***
+composer create-project laravel/laravel hotel_reservation
+cd hotel_reservation
+
+** Laravel breeze auth ***
+composer require laravel/breeze --dev
+
+** Breeze React **
+php artisan breeze:install react
+
+** Install NPM Dependencies **
+npm install
+
+** Run ***
+
+**frontend**
+npm run dev
+
+**backend**
+php artisan serve
+
+** Shadcn UI requires Tailwind CSS plugins. **
+npm install tailwind-variants class-variance-authority clsx tailwind-merge lucide-react
