@@ -27,6 +27,8 @@ Route::group(['prefix' => 'admin'], function(){
 
         //Herro Section Controller
         Route::get('herosection', [HeroSectionController::class, 'index'])->name('admin.herosection');
+        Route::get('herosection/view', [HeroSectionController::class, 'view'])->name('admin.herosection.view');
+        Route::post('herosection', [HeroSectionController::class, 'store'])->name('admin.herosection.store');
     });
 
 });

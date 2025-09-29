@@ -18,6 +18,11 @@ class HandleInertiaDynamic
             'guest' => [
                 'user' => auth('guest')->check() ? $request->user('guest') : null,
             ],
+            'errors' => function () use ($request) {
+                return $request->session()->get('errors')
+                    ? $request->session()->get('errors')->getBag('default')->getMessages()
+                    : (object) [];
+            },
         ]);
 
         return $next($request);

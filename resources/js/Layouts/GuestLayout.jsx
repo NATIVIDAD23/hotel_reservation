@@ -13,13 +13,13 @@ export default function AdminGuestLayout({ children }) {
 
                     <div className="space-y-4 max-w-md">
                         <h1 className="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                            Welcome to LuxStay
+                            Welcome to Hotel Reservation
                         </h1>
                         <p className="text-lg lg:text-xl text-gray-600 leading-relaxed">
                             Experience luxury and comfort like never before. Book your perfect stay with our exclusive hotel reservation system.
                         </p>
 
-                        <div className="hidden lg:block space-y-3 pt-4">
+                        {/* <div className="hidden lg:block space-y-3 pt-4">
                             <div className="flex items-center space-x-3 text-gray-600">
                                 <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                                 <span>Best price guarantee</span>
@@ -32,7 +32,7 @@ export default function AdminGuestLayout({ children }) {
                                 <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                                 <span>Free cancellation</span>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
 

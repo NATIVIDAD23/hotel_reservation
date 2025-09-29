@@ -18,7 +18,7 @@ class Authenticate extends Middleware
     {
         if (! $request->expectsJson()) {
             // default for admin/staff
-            return route('guest.login');
+            return route('admin.login');
         }
 
         return null;

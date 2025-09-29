@@ -52,6 +52,7 @@ export function LoginDialog({ children, canResetPassword }) {
               value={data.email}
               autoComplete="username"
               onChange={(e) => setData("email", e.target.value)}
+              placeholder="jBkxI@example.com"
               required
             />
             {errors.email && (
@@ -68,6 +69,7 @@ export function LoginDialog({ children, canResetPassword }) {
               value={data.password}
               autoComplete="current-password"
               onChange={(e) => setData("password", e.target.value)}
+              placeholder="••••••••"
               required
             />
             {errors.password && (

@@ -21,7 +21,7 @@ Route::group(['prefix' => 'admin'], function(){
 
         Route::post('register', [RegisteredUserController::class, 'store']);
 
-        Route::get('/', [AuthenticatedSessionController::class, 'create']);
+        Route::get('/', [AuthenticatedSessionController::class, 'create'])->name('admin.login');
 
         Route::post('login', [AuthenticatedSessionController::class, 'store']) ->name('login');
 
