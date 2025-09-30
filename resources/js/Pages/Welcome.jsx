@@ -8,36 +8,15 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel"
 
-const heroSections = [
-  {
-    id: 1,
-    title: "Luxury Awaits You",
-    description: "Experience unparalleled comfort and service at our premium hotel.",
-    image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-  },
-  {
-    id: 2,
-    title: "Exclusive Deals",
-    description: "Special packages and seasonal offers for the perfect getaway.",
-    image: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-  },
-  {
-    id: 3,
-    title: "Perfect Venues",
-    description: "Host your events in our elegant spaces with professional service.",
-    image: "https://images.unsplash.com/photo-1611892440504-42a792e24d32?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80",
-  },
-]
-
-export default function Welcome() {
+export default function Welcome({
+    heroSections
+}) {
   return (
     <>
       <Head title="Welcome to Our Hotel" />
 
       {/* Navbar fixed sa top */}
       <GuestNavbar>
-
-      {/* Hero Section nasa ilalim mismo ng navbar */}
       <section className="relative w-full h-screen  -mt-0">
         <Carousel className="w-full h-full">
           <CarouselContent>
@@ -46,7 +25,7 @@ export default function Welcome() {
                 {/* Background Image */}
                 <div className="absolute inset-0">
                   <img
-                    src={hero.image}
+                    src={hero.image_path}
                     alt={hero.title}
                     className="w-full h-full object-cover"
                   />

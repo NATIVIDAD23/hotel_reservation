@@ -10,7 +10,6 @@ class HandleInertiaDynamic
 {
     public function handle(Request $request, Closure $next)
     {
-        // i-share muna bago tumuloy
         Inertia::share([
             'auth' => [
                 'admin' => auth('web')->check() ? $request->user('web') : null,
