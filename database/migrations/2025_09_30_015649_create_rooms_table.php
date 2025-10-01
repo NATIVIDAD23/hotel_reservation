@@ -13,11 +13,18 @@ return new class extends Migration
     {
         Schema::create('rooms', function (Blueprint $table) {
             $table->id();
-            $table->string('room_number');
-            $table->string('name');
-            $table->text('description');
-            $table->enum('status', ['available', 'unavailable', 'maintenance'])->default('available');
             $table->foreignId('room_type_id')->constrained('room_types')->onDelete('cascade');
+            $table->string('room_number');
+            $table->string('room_name');
+            $table->text('description');
+            $table->integer('adult')->default(0);
+            $table->integer('child')->default(0);
+            $table->integer('extra_pax')->default(0);
+            $table->enum('status', ['available', 'unavailable', 'maintenance'])->default('available');
+            $table->decimal('base_price', 8, 2);
+            $table->decimal('pax_rate', 8, 2);
+            $table->decimal('weekend_rate', 8, 2);
+            $table->json('facilities')->nullable();
             $table->timestamps();
         });
     }

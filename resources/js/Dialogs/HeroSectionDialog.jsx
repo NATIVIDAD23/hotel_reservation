@@ -7,7 +7,7 @@ import { useForm, usePage } from "@inertiajs/react";
 import { useState } from "react";
 import InputError from "@/Components/InputError";
 
-export function HeroSectionDialog({ hero = null, children, branches }) {
+export function HeroSectionDialog({ hero = null, children }) {
     const [open, setOpen] = useState(false);
     const { errors: pageErrors } = usePage().props;
     const { data, setData, post, put, processing, errors: formErrors, reset } = useForm({

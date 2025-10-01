@@ -4,13 +4,12 @@ namespace App\Providers;
 
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use App\Models\HeroSection;
-use App\Policies\HeroSectionPolicy;
 
 class AuthServiceProvider extends ServiceProvider
 {
     protected $policies = [
-        HeroSection::class => HeroSectionPolicy::class,
+        \App\Models\HeroSection::class => \App\Policies\HeroSectionPolicy::class,
+        \App\Models\RoomType::class => \App\Policies\RoomTypePolicy::class,
     ];
 
     public function boot(): void

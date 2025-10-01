@@ -1,14 +1,14 @@
 <?php
-
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\HeroSection;
-use Illuminate\Http\Request;
-use Inertia\Inertia;
+use DB;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Inertia\Inertia;
 
 class HeroSectionController extends Controller
 {
@@ -27,21 +27,21 @@ class HeroSectionController extends Controller
 
         $formatted = $heroSections->map(function ($heroSection) {
             return [
-                'id' => $heroSection->id,
-                'title' => $heroSection->title,
+                'id'          => $heroSection->id,
+                'title'       => $heroSection->title,
                 'description' => $heroSection->description,
-                'image_path' => Storage::url($heroSection->image_path),
+                'image_path'  => Storage::url($heroSection->image_path),
             ];
         });
 
         return Inertia::render('Admin/HeroSection/Index', [
             'heroSections' => [
-                'data' => $formatted,
-                'total' => $heroSections->total(),
-                'per_page' => $heroSections->perPage(),
-                'current_page' => $heroSections->currentPage(),
-                'from' => $heroSections->firstItem(),
-                'to' => $heroSections->lastItem(),
+                'data'          => $formatted,
+                'total'         => $heroSections->total(),
+                'per_page'      => $heroSections->perPage(),
+                'current_page'  => $heroSections->currentPage(),
+                'from'          => $heroSections->firstItem(),
+                'to'            => $heroSections->lastItem(),
                 'last_page_url' => $heroSections->lastPage(),
                 'next_page_url' => $heroSections->nextPageUrl(),
                 'prev_page_url' => $heroSections->previousPageUrl(),
@@ -51,32 +51,41 @@ class HeroSectionController extends Controller
 
     public function store(Request $request)
     {
-       $this->authorize('create', HeroSection::class);
+        try {
 
-       $validator = Validator::make($request->all(), [
-           'image_path' => 'required|image|mimes:jpg,png,jpeg|max:2048',
-           'title' => 'required|string|max:255',
-           'description' => 'required|string',
-       ], [
-           'image_path.required' => 'Please upload an image.',
-           'title.required' => 'Please enter a title.',
-           'description.required' => 'Please enter a description.',
-        ]);
+            $this->authorize('create', HeroSection::class);
 
-       if ($validator->fails()) {
-           return redirect()->back()->withErrors($validator)->withInput();
-       }
+            $validator = Validator::make($request->all(), [
+                'image_path'  => 'required|image|mimes:jpg,png,jpeg|max:2048',
+                'title'       => 'required|string|max:255',
+                'description' => 'required|string',
+            ], [
+                'image_path.required'  => 'Please upload an image.',
+                'title.required'       => 'Please enter a title.',
+                'description.required' => 'Please enter a description.',
+            ]);
 
-        // Store the uploaded file in storage/app/public/hero
-        $path = $request->file('image_path')->store('hero', 'public');
+            if ($validator->fails()) {
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
 
-        HeroSection::create([
-            'title' => $request->title,
-            'description' => $request->description,
-            'image_path' => $path,
-        ]);
+            DB::beginTransaction();
 
-        return redirect()->back()->with('success', 'Hero Section created successfully.');
+            $path = $request->file('image_path')->store('hero', 'public');
+
+            HeroSection::create([
+                'title'       => $request->title,
+                'description' => $request->description,
+                'image_path'  => $path,
+            ]);
+
+            DB::commit();
+
+            return redirect()->back()->with('success', 'Hero Section created successfully.');
+
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     public function update(Request $request, HeroSection $heroSection)
@@ -84,15 +93,15 @@ class HeroSectionController extends Controller
         $this->authorize('update', $heroSection);
 
         $request->validate([
-            'title' => 'nullable|string|max:255',
+            'title'       => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'image_path' => 'nullable|image|max:2048',
+            'image_path'  => 'nullable|image|max:2048',
         ]);
 
         $heroSection->update($request->all());
 
         return redirect()->route('hero-sections.index')
-                         ->with('success', 'Hero Section updated successfully.');
+            ->with('success', 'Hero Section updated successfully.');
     }
 
     public function destroy(HeroSection $heroSection)
@@ -102,6 +111,6 @@ class HeroSectionController extends Controller
         $heroSection->delete();
 
         return redirect()->route('hero-sections.index')
-                         ->with('success', 'Hero Section deleted successfully.');
+            ->with('success', 'Hero Section deleted successfully.');
     }
 }

@@ -43,11 +43,15 @@ export default function Index({ heroSections }) {
       <Head title="Hero Section" />
 
       <Card>
-        <CardHeader className="flex justify-between items-center">
-          <CardTitle>Hero Sections</CardTitle>
-          <HeroSectionDialog>
-            <Button>Upload New</Button>
-          </HeroSectionDialog>
+        <CardHeader>
+            <div className="flex justify-between items-center w-full">
+                <CardTitle>Hero Sections</CardTitle>
+                <div className="flex gap-2">
+                    <HeroSectionDialog>
+                        <Button>Upload New</Button>
+                    </HeroSectionDialog>
+                </div>
+            </div>
         </CardHeader>
 
         <CardContent>

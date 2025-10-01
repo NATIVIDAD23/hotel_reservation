@@ -33,7 +33,9 @@ import {
     LogOut,
     Menu,
     Settings,
-    Hotel
+    Hotel,
+    House,
+    Type
 } from "lucide-react";
 
 export default function AuthenticatedLayout({ header, children }) {
@@ -52,6 +54,12 @@ export default function AuthenticatedLayout({ header, children }) {
             href: route('admin.herosection'),
             icon: Image,
             active: route().current('admin.herosection')
+        },
+        {
+            name: "Room Types",
+            href: route('admin.room.type'),
+            icon: Type,
+            active: route().current('admin.room.type')
         }
     ];
 
