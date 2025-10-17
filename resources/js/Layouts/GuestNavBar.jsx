@@ -265,7 +265,7 @@ export default function GuestNavbar({ children }) {
                                         <LoginDialog canResetPassword={true}>
                                             <Button
                                                 variant="ghost"
-                                                className="text-white"
+                                                
                                             >
                                                 Sign In
                                             </Button>

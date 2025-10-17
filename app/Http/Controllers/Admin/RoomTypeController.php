@@ -19,8 +19,22 @@ class RoomTypeController extends Controller
 
         $this->authorize('viewAny', RoomType::class);
 
-        return Inertia::render('Admin/Rooms/RoomType');
+        $query = RoomType::query();
 
+        $roomtype = $query->paginate($request->per_page ?? 10); 
+        $formattedRoomtypes = $roomtype->through(function ($room) {
+            return [
+                'id'        => encrypt($room->id),
+                'slug'      => $room->slug,
+                'name'      => $room->name,
+                'amenities' => $room->amenities,
+                'rules'     => $room->rules,
+            ];
+        });
+        
+        return Inertia::render('Admin/Rooms/RoomType', [
+            'roomTypes' => $formattedRoomtypes
+        ]);
     }
 
     public function store(Request $request)
