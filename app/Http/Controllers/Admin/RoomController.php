@@ -9,6 +9,10 @@ use Inertia\Inertia;
 class RoomController extends Controller
 {
     public function index(){
-        return Inertia::render('Admin/Rooms/RoomType');
+        return Inertia::render('Admin/Rooms/Room');
+    }
+
+    public function create(){
+        return Inertia::render('Admin/Rooms/RoomCreate');
     }
 }

@@ -60,7 +60,13 @@ export default function AuthenticatedLayout({ header, children }) {
             href: route('admin.room.type'),
             icon: Type,
             active: route().current('admin.room.type')
-        }
+        },
+        {
+            name: "Rooms",
+            href: route('admin.room'),
+            icon: House,
+            active: route().current('admin.room')
+        },
     ];
 
     return (
@@ -250,7 +256,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                         </DropdownMenuLabel>
                                         <DropdownMenuSeparator />
                                         <DropdownMenuItem asChild>
-                                            <Link href={route('profile.edit')} className="cursor-pointer">
+                                            <Link href={route('admin.profile.edit')} className="cursor-pointer">
                                                 <User className="h-4 w-4 mr-2" />
                                                 Profile
                                             </Link>

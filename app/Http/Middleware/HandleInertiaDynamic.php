@@ -14,8 +14,7 @@ class HandleInertiaDynamic
             'auth' => [
                 'admin' => auth('web')->check() ? $request->user('web') : null,
             ],
-            'guest' => [
-                'user' => auth('guest')->check() ? $request->user('guest') : null,
+            'guest' => [ 'user' => auth('guest')->check() ? $request->user('guest') : null,
             ],
             'errors' => function () use ($request) {
                 return $request->session()->get('errors')

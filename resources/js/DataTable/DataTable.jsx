@@ -1,164 +1,136 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 import {
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
+    flexRender,
+    getCoreRowModel,
+    useReactTable,
+} from "@tanstack/react-table";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
+import { Button } from "@/Components/ui/button";
 
 // Wrap with forwardRef
 export const DataTable = React.forwardRef(function DataTable(
-  { url, columns, resourceKey },
-  ref
+    { url, columns, data },
+    ref
 ) {
-  const [data, setData] = React.useState([])
-  const [loading, setLoading] = React.useState(false)
-  const [search, setSearch] = React.useState("")
-  const [pagination, setPagination] = React.useState({
-    total: 0,
-    per_page: 10,
-    current_page: 1,
-  })
+    const table = useReactTable({
+        data: data.data || [],
+        columns,
+        getCoreRowModel: getCoreRowModel(),
+    });
 
-  const fetchData = async (page = 1, searchTerm = "") => {
-    setLoading(true)
-    try {
-      const res = await fetch(
-        `${url}?page=${page}&per_page=${pagination.per_page}&search=${searchTerm}`,
-        { headers: { Accept: "application/json" } }
-      )
+    return (
+        <>
+            <div className="overflow-hidden rounded-lg">
+                <Table>
+                    <TableHeader className="bg-gray-50/50">
+                        {table.getHeaderGroups().map((headerGroup) => (
+                            <TableRow
+                                key={headerGroup.id}
+                                className="border-b border-gray-200"
+                            >
+                                {headerGroup.headers.map((header) => (
+                                    <TableHead
+                                        key={header.id}
+                                        className="py-4 font-semibold text-gray-700"
+                                    >
+                                        {flexRender(
+                                            header.column.columnDef.header,
+                                            header.getContext()
+                                        )}
+                                    </TableHead>
+                                ))}
+                            </TableRow>
+                        ))}
+                    </TableHeader>
 
-      const response = await res.json()
-      const result = response[resourceKey]
-      if (!result) {
-        console.error(`ResourceKey "${resourceKey}" not found in:`, response)
-        return
-      }
-
-      setData(result.data)
-      setPagination({
-        total: result.total,
-        per_page: result.per_page,
-        current_page: result.current_page,
-      })
-    } catch (err) {
-      console.error("Fetch error", err)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  // Run on mount
-  React.useEffect(() => {
-    fetchData(pagination.current_page, search)
-  }, [pagination.current_page, search])
-
-  // Expose methods to parent
-  React.useImperativeHandle(ref, () => ({
-    refresh: () => fetchData(pagination.current_page, search),
-    setData,
-  }))
-
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    manualPagination: true,
-    pageCount: Math.ceil(pagination.total / pagination.per_page),
-  })
-
-  return (
-    <div className="w-full">
-      {/* Filters */}
-      <div className="flex items-center py-4 gap-2">
-        <Input
-          placeholder="Search..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="max-w-sm"
-        />
-      </div>
-
-      {/* Table */}
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(header.column.columnDef.header, header.getContext())}
-                  </TableHead>
-                ))}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {loading ? (
-              <TableRow>
-                <TableCell colSpan={columns.length} className="text-center">
-                  Loading...
-                </TableCell>
-              </TableRow>
-            ) : table.getRowModel().rows.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={columns.length} className="text-center">
-                  No results.
-                </TableCell>
-              </TableRow>
+                    <TableBody>
+                        {table.getRowModel().rows.length ? (
+                            table.getRowModel().rows.map((row) => (
+                                <TableRow
+                                    key={row.id}
+                                    className="border-b border-gray-100 hover:bg-gray-50/50 transition-colors"
+                                >
+                                    {row.getVisibleCells().map((cell) => (
+                                        <TableCell
+                                            key={cell.id}
+                                            className="py-4"
+                                        >
+                                            {flexRender(
+                                                cell.column.columnDef.cell,
+                                                cell.getContext()
+                                            )}
+                                        </TableCell>
+                                    ))}
+                                </TableRow>
+                            ))
+                        ) : (
+                            <TableRow>
+                                <TableCell
+                                    colSpan={columns.length}
+                                    className="py-12 text-center"
+                                >
+                                    <div className="flex flex-col items-center justify-center text-gray-400">
+                                        <p className="text-lg font-medium text-gray-500">
+                                            No results found
+                                        </p>
+                                    </div>
+                                </TableCell>
+                            </TableRow>
+                        )}
+                    </TableBody>
+                </Table>
+            </div>
+            {table.getRowModel().rows.length > 0 && (
+                <div className="flex flex-col sm:flex-row justify-between items-center gap-4 p-6 border-t border-gray-200">
+                    <div className="text-sm text-gray-600">
+                        Showing{" "}
+                        <span className="font-semibold">
+                            {data.from ?? 0}
+                        </span>{" "}
+                        to{" "}
+                        <span className="font-semibold">
+                            {data.to ?? 0}
+                        </span>{" "}
+                        of{" "}
+                        <span className="font-semibold">
+                            {data.total ?? 0}
+                        </span>{" "}
+                        results
+                    </div>
+                    <div className="flex gap-1">
+                        {data.links.map((link, idx) => (
+                            <Button
+                                key={idx}
+                                variant={link.active ? "default" : "outline"}
+                                size="sm"
+                                disabled={!link.url}
+                                onClick={() =>
+                                    link.url &&
+                                    router.visit(link.url, {
+                                        preserveScroll: true,
+                                    })
+                                }
+                                className="min-w-[40px]"
+                            >
+                                {link.label
+                                    .replace("&laquo;", "«")
+                                    .replace("&raquo;", "»")
+                                    .replace("Previous", "←")
+                                    .replace("Next", "→")}
+                            </Button>
+                        ))}
+                    </div>
+                </div>
             )}
-          </TableBody>
-        </Table>
-      </div>
-
-      {/* Pagination */}
-      <div className="flex justify-between items-center py-4">
-        <span className="text-sm text-muted-foreground">
-          Page {pagination.current_page} of{" "}
-          {Math.ceil(pagination.total / pagination.per_page)}
-        </span>
-        <div className="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() =>
-              setPagination((p) => ({ ...p, current_page: p.current_page - 1 }))
-            }
-            disabled={pagination.current_page === 1}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() =>
-              setPagination((p) => ({ ...p, current_page: p.current_page + 1 }))
-            }
-            disabled={
-              pagination.current_page ===
-              Math.ceil(pagination.total / pagination.per_page)
-            }
-          >
-            Next
-          </Button>
-        </div>
-      </div>
-    </div>
-  )
-})
+        </>
+    );
+});
