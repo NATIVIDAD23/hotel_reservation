@@ -6,8 +6,19 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/Components/ui/card";
 import { Input } from "@/Components/ui/input";
 import InputError from "@/Components/InputError";
 import { Upload, Image as ImageIcon, Plus } from "lucide-react";
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+  } from "@/components/ui/select"
 
-export default function RoomCreate() {
+export default function RoomCreate({
+    room_types,
+}) {
   const { data, setData, post, processing, errors, reset } = useForm({
     name: "",
     room_type: "",
@@ -76,13 +87,27 @@ export default function RoomCreate() {
                   <label className="text-sm font-medium text-gray-700">
                     Room Type *
                   </label>
-                  <Input
-                    name="room_type"
-                    value={data.room_type}
-                    onChange={handleChange}
-                    placeholder="e.g., Suite, Deluxe, Standard"
-                    className="focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                  />
+
+                  <Select
+                  name="room_type"
+                  value={data.room_type}
+                  onValueChange={handleChange}
+                  className="focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  >
+                <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select room type" />
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectGroup>
+                    <SelectLabel>Room Types</SelectLabel>
+                    {room_types.map((room_type) => (
+                        <SelectItem key={room_type.id} value={room_type.id}>
+                        {room_type.name}
+                        </SelectItem>
+                    ))}
+                    </SelectGroup>
+                </SelectContent>
+                </Select>
                   <InputError message={errors.room_type} />
                 </div>
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\RoomType;
 use Inertia\Inertia;
 
 class RoomController extends Controller
@@ -13,6 +14,11 @@ class RoomController extends Controller
     }
 
     public function create(){
-        return Inertia::render('Admin/Rooms/RoomCreate');
+
+        $roomTypes = RoomType::all();
+
+        return Inertia::render('Admin/Rooms/RoomCreate', [
+            'room_types' => $roomTypes
+        ]);
     }
 }
